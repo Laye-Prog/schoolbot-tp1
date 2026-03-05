@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SchoolBot 🎓</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="app-wrapper">
+
+    <!-- HEADER -->
+    <header class="app-header">
+        <div class="header-brand">
+            <div class="brand-logo">🎓</div>
+            <div class="brand-text">
+                <h1>SchoolBot</h1>
+                <p>Ton assistant scolaire</p>
+            </div>
+        </div>
+        <button class="clear-btn" id="clear-btn" title="Effacer la conversation">🗑️ Effacer</button>
+    </header>
+
+    <!-- SÉLECTEUR DE MODE (Exercice 3 : 4 modes) -->
+    <nav class="mode-selector">
+        <button class="mode-btn active" data-mode="naturel">😊 Naturel</button>
+        <button class="mode-btn" data-mode="roast">🔥 Roast</button>
+        <button class="mode-btn" data-mode="sympathique">💖 Sympathique</button>
+        <button class="mode-btn" data-mode="philosophique">🧘 Philosophique</button>
+    </nav>
+
+    <!-- ZONE DE CHAT -->
+    <main class="chat-area">
+        <div id="chat-container"></div>
+
+        <!-- INPUT -->
+        <div class="input-area">
+            <input
+                type="text"
+                id="user-input"
+                placeholder="Tape un message... (Ex: Bonjour !)"
+            />
+            <button class="send-btn" id="send-btn">📤 Envoyer</button>
+        </div>
+    </main>
+
+</div>
+
+<script src="js/app.js"></script>
+
+</body>
+</html>
