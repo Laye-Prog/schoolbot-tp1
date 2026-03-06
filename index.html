@@ -10,7 +10,7 @@
 
 <div class="app-wrapper">
 
-    <!-- HEADER -->
+    <!-- HEADER — Partie 1 : bouton toggle thème -->
     <header class="app-header">
         <div class="header-brand">
             <div class="brand-logo">🎓</div>
@@ -19,29 +19,33 @@
                 <p>Ton assistant scolaire</p>
             </div>
         </div>
-        <button class="clear-btn" id="clear-btn" title="Effacer la conversation">🗑️ Effacer</button>
+        <div class="header-controls">
+            <!-- Partie 1 : Toggle Thème -->
+            <button class="theme-toggle" id="theme-toggle" aria-label="Changer de thème">
+                <span class="theme-icon sun">☀️</span>
+                <span class="theme-icon moon">🌙</span>
+            </button>
+            <button class="clear-btn" id="clear-btn" title="Effacer">🗑️</button>
+        </div>
     </header>
 
-    <!-- SÉLECTEUR DE MODE (Exercice 3 : 4 modes) -->
+    <!-- SÉLECTEUR DE MODE — 5 modes dont Motivateur (bonus) -->
     <nav class="mode-selector">
         <button class="mode-btn active" data-mode="naturel">😊 Naturel</button>
         <button class="mode-btn" data-mode="roast">🔥 Roast</button>
         <button class="mode-btn" data-mode="sympathique">💖 Sympathique</button>
         <button class="mode-btn" data-mode="philosophique">🧘 Philosophique</button>
+        <button class="mode-btn" data-mode="motivateur">🚀 Motivateur</button>
     </nav>
 
     <!-- ZONE DE CHAT -->
     <main class="chat-area">
         <div id="chat-container"></div>
-
-        <!-- INPUT -->
         <div class="input-area">
-            <input
-                type="text"
-                id="user-input"
-                placeholder="Tape un message... (Ex: Bonjour !)"
-            />
-            <button class="send-btn" id="send-btn">📤 Envoyer</button>
+            <input type="text" id="user-input" placeholder="Tape un message..." />
+            <button class="send-btn" id="send-btn">
+                <span class="btn-icon">📤</span>
+            </button>
         </div>
     </main>
 
