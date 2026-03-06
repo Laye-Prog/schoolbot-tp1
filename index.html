@@ -10,17 +10,15 @@
 
 <div class="app-wrapper">
 
-    <!-- HEADER — Partie 1 : bouton toggle thème -->
     <header class="app-header">
         <div class="header-brand">
             <div class="brand-logo">🎓</div>
             <div class="brand-text">
                 <h1>SchoolBot</h1>
-                <p>Ton assistant scolaire</p>
+                <p>Ton assistant scolaire intelligent</p>
             </div>
         </div>
         <div class="header-controls">
-            <!-- Partie 1 : Toggle Thème -->
             <button class="theme-toggle" id="theme-toggle" aria-label="Changer de thème">
                 <span class="theme-icon sun">☀️</span>
                 <span class="theme-icon moon">🌙</span>
@@ -29,7 +27,6 @@
         </div>
     </header>
 
-    <!-- SÉLECTEUR DE MODE — 5 modes dont Motivateur (bonus) -->
     <nav class="mode-selector">
         <button class="mode-btn active" data-mode="naturel">😊 Naturel</button>
         <button class="mode-btn" data-mode="roast">🔥 Roast</button>
@@ -38,20 +35,43 @@
         <button class="mode-btn" data-mode="motivateur">🚀 Motivateur</button>
     </nav>
 
-    <!-- ZONE DE CHAT -->
     <main class="chat-area">
+
+        <!-- Suggestions rapides (Module 3) -->
+        <div class="suggestions">
+            <button class="suggestion-chip" onclick="sendSuggestion('Qui est Amadou ?')">👤 Qui est Amadou ?</button>
+            <button class="suggestion-chip" onclick="sendSuggestion('Liste tous les étudiants')">📋 Liste étudiants</button>
+            <button class="suggestion-chip" onclick="sendSuggestion('Fun fact sur Fatou')">🎉 Fun fact</button>
+            <button class="suggestion-chip" onclick="sendSuggestion('Combien d\'étudiants ?')">📊 Stats</button>
+            <button class="suggestion-chip" onclick="sendSuggestion('Surprise moi !')">🎲 Aléatoire</button>
+        </div>
+
         <div id="chat-container"></div>
+
         <div class="input-area">
-            <input type="text" id="user-input" placeholder="Tape un message..." />
+            <input type="text" id="user-input" placeholder="Ex: Qui est Moussa ? Fun fact sur Fatou ?" />
             <button class="send-btn" id="send-btn">
                 <span class="btn-icon">📤</span>
             </button>
         </div>
+
     </main>
 
 </div>
 
+<!-- data.js AVANT app.js (Module 3) -->
+<script src="js/data.js"></script>
 <script src="js/app.js"></script>
+
+<script>
+    function sendSuggestion(text) {
+        const input = document.getElementById('user-input');
+        if (input) {
+            input.value = text;
+            if (window.triggerSend) window.triggerSend();
+        }
+    }
+</script>
 
 </body>
 </html>
