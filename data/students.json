@@ -1,0 +1,147 @@
+{
+  "etablissement": "École Supérieure du Numérique",
+  "annee": "2024-2025",
+  "etudiants": [
+    {
+      "id": 1,
+      "nom": "Diop",
+      "prenom": "Amadou",
+      "age": 22,
+      "filiere": "Informatique",
+      "niveau": "Licence 3",
+      "photo": "👨‍💻",
+      "personnalite": {
+        "traits": ["créatif", "déterminé", "leader"],
+        "force": "résolution de problèmes",
+        "faiblesse": "perfectionnisme"
+      },
+      "funFacts": [
+        "A créé sa première app à 14 ans",
+        "Champion de hackathon 2023",
+        "Peut coder 12 heures d'affilée sans s'arrêter",
+        "A trois écrans sur son bureau"
+      ],
+      "interets": ["IA", "blockchain", "football"],
+      "citation": "Le code est de la poésie pour les machines",
+      "statistiques": {
+        "projetsRealises": 23,
+        "cafeParJour": 4,
+        "lignesDeCode": 75000
+      }
+    },
+    {
+      "id": 2,
+      "nom": "Ndiaye",
+      "prenom": "Fatou",
+      "age": 21,
+      "filiere": "Cybersécurité",
+      "niveau": "Licence 2",
+      "photo": "👩‍💻",
+      "personnalite": {
+        "traits": ["analytique", "curieuse", "persévérante"],
+        "force": "détection des failles de sécurité",
+        "faiblesse": "impatience"
+      },
+      "funFacts": [
+        "A découvert une faille de sécurité dans un site gouvernemental à 19 ans",
+        "Pratique le CTF chaque week-end",
+        "Dort avec un livre de cryptographie sous l'oreiller",
+        "Parle couramment Python, C++ et le klingon"
+      ],
+      "interets": ["cybersécurité", "cryptographie", "musique jazz"],
+      "citation": "La meilleure défense, c'est de penser comme un attaquant",
+      "statistiques": {
+        "projetsRealises": 15,
+        "cafeParJour": 2,
+        "lignesDeCode": 42000
+      }
+    },
+    {
+      "id": 3,
+      "nom": "Ba",
+      "prenom": "Moussa",
+      "age": 23,
+      "filiere": "Data Science",
+      "niveau": "Master 1",
+      "photo": "📊",
+      "personnalite": {
+        "traits": ["méthodique", "passionné", "collaboratif"],
+        "force": "visualisation de données",
+        "faiblesse": "procrastination"
+      },
+      "funFacts": [
+        "A analysé les statistiques de sa propre vie pendant 1 an",
+        "Prédit les résultats sportifs avec 87% de précision",
+        "Son tableau de bord favori a 47 graphiques",
+        "A nommé ses plantes selon des distributions statistiques"
+      ],
+      "interets": ["data science", "sport", "machine learning", "cuisine"],
+      "citation": "Sans données, tu n'es qu'une personne avec une opinion",
+      "statistiques": {
+        "projetsRealises": 18,
+        "cafeParJour": 3,
+        "lignesDeCode": 58000
+      }
+    },
+    {
+      "id": 4,
+      "nom": "Sy",
+      "prenom": "Aïssatou",
+      "age": 20,
+      "filiere": "Développement Web",
+      "niveau": "Licence 1",
+      "photo": "🎨",
+      "personnalite": {
+        "traits": ["créative", "organisée", "empathique"],
+        "force": "design d'interface utilisateur",
+        "faiblesse": "sous-estime son talent"
+      },
+      "funFacts": [
+        "A redesigné le site de son école avant même de savoir coder",
+        "Collection 200+ palettes de couleurs sur Dribbble",
+        "Peut passer 3h à choisir la bonne nuance de bleu",
+        "Dessine ses wireframes à la main avant de coder"
+      ],
+      "interets": ["UI/UX", "typographie", "photographie", "anime"],
+      "citation": "Un bon design est invisible — les utilisateurs ne le voient pas, ils le ressentent",
+      "statistiques": {
+        "projetsRealises": 9,
+        "cafeParJour": 1,
+        "lignesDeCode": 28000
+      }
+    },
+    {
+      "id": 5,
+      "nom": "Sow",
+      "prenom": "Ibrahim",
+      "age": 24,
+      "filiere": "Réseaux & Télécoms",
+      "niveau": "Master 2",
+      "photo": "🌐",
+      "personnalite": {
+        "traits": ["pragmatique", "fiable", "discret"],
+        "force": "architecture réseau",
+        "faiblesse": "communication verbale"
+      },
+      "funFacts": [
+        "A configuré le réseau de son quartier pour le fun",
+        "Connaît par cœur les 7 couches du modèle OSI",
+        "A mis en place un homelab avec 12 machines virtuelles",
+        "Dort mieux quand il entend des ventilateurs de serveurs"
+      ],
+      "interets": ["réseaux", "Linux", "domotique", "randonnée"],
+      "citation": "Un réseau bien configuré, c'est comme de la musique bien orchestrée",
+      "statistiques": {
+        "projetsRealises": 31,
+        "cafeParJour": 5,
+        "lignesDeCode": 95000
+      }
+    }
+  ],
+  "stats": {
+    "totalEtudiants": 5,
+    "filieres": ["Informatique", "Cybersécurité", "Data Science", "Développement Web", "Réseaux & Télécoms"],
+    "totalProjets": 96,
+    "totalCafes": 15
+  }
+}
