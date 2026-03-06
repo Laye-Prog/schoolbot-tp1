@@ -1,97 +1,66 @@
 /* =================================================================
-   SCHOOLBOT — TP2 : js/app.js
-   Partie 1 : Toggle thème + localStorage
-   Partie 3 : Typing indicator
-   Partie 5 : Micro-interactions bouton envoi
+   SCHOOLBOT — TP3 : js/app.js
+   Intègre TP1 + TP2 + Module 3 : Base de données JSON
    ================================================================= */
 
 let currentMode = 'naturel';
 let messageCount = 0;
 
+// Réponses génériques par mode (fallback quand aucun intent détecté)
 const responses = {
     naturel: [
-        "Bonne question ! Laisse-moi réfléchir... 🤔",
-        "Intéressant ! Tu peux me donner plus de détails ?",
-        "Je note ça ! 📝",
-        "C'est une bonne perspective !",
-        "Hmm, je vois ce que tu veux dire.",
-        "Super, continue ! Je t'écoute 😊",
-        "Voilà une excellente remarque !",
-        "Je comprends ton point de vue.",
-        "Très pertinent comme question !",
-        "Ah oui, c'est un sujet important !"
+        "Bonne question ! Tu peux me demander des infos sur les étudiants 🤔",
+        "Essaie : 'Qui est Amadou ?' ou 'Liste tous les étudiants' 😊",
+        "Je peux t'aider à trouver des infos sur n'importe quel étudiant ! 📝",
+        "Pose-moi une question sur les étudiants de l'école !"
     ],
     roast: [
-        "Vraiment ? C'est tout ce que t'as trouvé ? 😏",
-        "Oh wow, quelle originalité... 🙄",
-        "T'as cherché longtemps pour sortir ça ? 💀",
-        "Classique. Prévisible. Décevant. 😂",
-        "C'est mignon. Pour un enfant de 5 ans. 🔥",
-        "Je peux pas croire que t'aies osé taper ça 😭",
-        "Sérieusement ? On va travailler là-dessus.",
-        "Bold move, on verra... Spoiler : non. 👀",
-        "Tu veux un trophée ? 🏆 Non.",
-        "J'ai vu des IA plus intelligentes en jeux vidéo. 😬"
+        "Vraiment ? C'est tout ce que t'as trouvé ? 😏 Demande-moi un étudiant !",
+        "T'as cherché longtemps pour sortir ça ? 💀 Essaie 'Qui est Fatou ?'",
+        "Classique. Prévisible. Décevant. 😂 Demande quelque chose d'utile !",
+        "Je peux pas croire que t'aies osé taper ça 😭"
     ],
     sympathique: [
-        "Oh c'est TELLEMENT une bonne question ! 💖",
-        "Tu es vraiment brillant(e) ! 🌟",
-        "Quelle curiosité magnifique ! 🥰",
-        "J'adore que tu poses cette question ! ✨",
-        "Tu sais quoi ? T'es incroyable ! 💕",
-        "Oh wow, tu réfléchis vraiment bien ! 🌈",
-        "Ta question me touche vraiment ! 💓",
-        "Quelle belle façon de voir les choses ! 🌸",
-        "Tu es une source d'inspiration ! 🦋",
-        "Je suis tellement content(e) que tu demandes ça ! 💗"
+        "Oh c'est TELLEMENT une bonne idée de demander ça ! 💖",
+        "Tu peux me demander des infos sur les étudiants ! Je t'adore ! 🌟",
+        "Quelle curiosité magnifique ! Demande-moi qui tu veux ! 🥰",
+        "T'es incroyable ! Pose-moi une question sur nos étudiants ! 💕"
     ],
     philosophique: [
-        "Hmm... La connaissance est-elle vraiment accessible ? 🤔",
-        "Comme disait Socrate : 'Je sais que je ne sais rien'... 📚",
-        "Mais qu'est-ce qu'une question, sinon une quête de sens ? 🧘",
-        "Dans quel monde veux-tu que je réponde ? 🌅",
-        "Tout n'est-il pas relatif, finalement ? 💭",
-        "La réponse existe-t-elle avant qu'on la cherche ? 🔮",
-        "Ton questionnement révèle une sagesse profonde... 🌙",
-        "La vraie réponse est peut-être dans la question ? ✨",
-        "L'être précède-t-il l'essence, ou l'inverse ? 🌀",
-        "Le doute est le commencement de toute philosophie. 📖"
+        "Hmm... La connaissance est-elle vraiment accessible ? 🤔 Demande-moi un étudiant.",
+        "Qu'est-ce qu'une question, sinon une quête de sens ? 🧘",
+        "Tout n'est-il pas relatif ? Essaie 'Qui est Ibrahim ?' 💭",
+        "Le doute est le commencement de toute philosophie... 📖"
     ],
     motivateur: [
-        "OUAIS ! EXCELLENTE QUESTION ! TU GÈRES ! 🚀",
-        "C'EST ÇA L'ESPRIT ! CONTINUE COMME ÇA ! 💪",
-        "BOOM ! T'as le feu en toi ! 🔥",
-        "ON LÂCHE RIEN ! LA QUESTION QU'IL FALLAIT ! ⚡",
-        "TU VAS TOUT DÉCHIRER ! J'EN SUIS SÛR ! 🏆",
-        "CHAQUE QUESTION TE REND PLUS FORT(E) ! 💯",
-        "INCROYABLE ! T'ES UNE MACHINE ! 🎯",
-        "LE SUCCÈS C'EST POUR TOI ! FONCE ! 🌟",
-        "RIEN NE T'ARRÊTE ! ENCORE ! 🦁",
-        "CHAMPION(NE) ! C'EST ÇA QU'ON VEUT ! 🥇"
+        "OUAIS ! DEMANDE-MOI UN ÉTUDIANT ET ON VA TOUT DÉCHIRER ! 🚀",
+        "C'EST ÇA L'ESPRIT ! ESSAIE 'QUI EST MOUSSA ?' ! 💪",
+        "BOOM ! TU VAS TOUT APPRENDRE SUR CES ÉTUDIANTS ! 🔥",
+        "ON LÂCHE RIEN ! POSE TA QUESTION ! ⚡"
     ]
 };
 
 const keywordResponses = {
     'bonjour': {
-        naturel: "Bonjour ! Je suis SchoolBot, comment puis-je t'aider ? 😊",
+        naturel: "Bonjour ! Je suis SchoolBot, pose-moi des questions sur les étudiants ! 😊",
         roast: "Oh, tu sais dire bonjour. Félicitations. 🙄",
         sympathique: "BONJOUR ! Oh quelle joie ! 💖✨",
         philosophique: "Bonjour... Qu'est-ce que le 'bonjour' sinon une tentative de connexion ? 🧘",
         motivateur: "BONJOUR CHAMPION(NE) ! CETTE JOURNÉE VA ÊTRE INCROYABLE ! 🚀🔥"
     },
     'salut': {
-        naturel: "Salut ! Pose-moi des questions ! 🎓",
+        naturel: "Salut ! Je connais 5 étudiants, demande-moi tout ! 🎓",
         roast: "Salut toi-même. T'arrives enfin ? 😏",
         sympathique: "SALUT ! Oh c'est trop bien ! 🥰💕",
-        philosophique: "Salut... Un mot, et pourtant tout un univers de sens. 💭",
-        motivateur: "SALUT WARRIOR ! PRÊT(E) À TOUT DÉPASSER ? 💪⚡"
+        philosophique: "Salut... Un mot, et tout un univers de sens. 💭",
+        motivateur: "SALUT WARRIOR ! PRÊT(E) À TOUT APPRENDRE ? 💪⚡"
     },
     'aide': {
-        naturel: "Bien sûr ! Tu peux me parler de tout 😊",
-        roast: "T'as besoin d'aide ? Surprise... 🙄",
-        sympathique: "Bien sûr que je vais t'aider ! 💖",
-        philosophique: "L'aide... qu'est-ce qu'aider vraiment ? 🤔",
-        motivateur: "T'AS PAS BESOIN D'AIDE, T'AS BESOIN D'ACTION ! 🔥"
+        naturel: "Je peux t'aider ! Essaie :\n• 'Qui est Amadou ?'\n• 'Fun fact sur Fatou'\n• 'Liste tous les étudiants'\n• 'Combien d\\'étudiants ?' 😊",
+        roast: "T'as besoin d'aide ? Demande un étudiant, c'est pas si compliqué. 🙄",
+        sympathique: "Bien sûr ! Tu peux tout me demander sur les étudiants ! 💖",
+        philosophique: "L'aide... qu'est-ce qu'aider vraiment ? Demande-moi un étudiant. 🤔",
+        motivateur: "T'AS PAS BESOIN D'AIDE, T'AS BESOIN D'ACTION ! DEMANDE UN ÉTUDIANT ! 🔥"
     },
     'merci': {
         naturel: "De rien ! N'hésite pas 😊",
@@ -99,18 +68,14 @@ const keywordResponses = {
         sympathique: "Oh non c'est MOI qui te remercie ! 💕🌟",
         philosophique: "La gratitude... vertu cardinale de tout être pensant. 🧘",
         motivateur: "PAS DE MERCI, ON EST UNE ÉQUIPE ! 💪"
-    },
-    'sens de la vie': {
-        naturel: "42, bien sûr ! 😄",
-        roast: "42. Prochaine question ? 😏",
-        sympathique: "Le sens de la vie c'est de partager et d'aimer ! 💖",
-        philosophique: "Le sens de la vie... peut-être est-ce de poser cette question ? 🤔",
-        motivateur: "LE SENS DE LA VIE C'EST DE TOUT DONNER CHAQUE JOUR ! 🔥"
     }
 };
 
+// ============================================
+// INITIALISATION
+// ============================================
 function initializeApp() {
-    console.log('🚀 Initialisation SchoolBot - TP2...');
+    console.log('🚀 Initialisation SchoolBot - TP3...');
 
     const chatContainer = document.getElementById('chat-container');
     const userInput = document.getElementById('user-input');
@@ -119,28 +84,37 @@ function initializeApp() {
     const themeToggle = document.getElementById('theme-toggle');
     const modeButtons = document.querySelectorAll('.mode-btn');
 
-    // PARTIE 1 : Thème sauvegardé
+    // Thème sauvegardé
     const savedTheme = localStorage.getItem('schoolbot-theme') || 'dark';
     if (savedTheme === 'light') document.body.classList.add('light-theme');
 
     if (themeToggle) {
         themeToggle.addEventListener('click', function() {
             document.body.classList.toggle('light-theme');
-            const currentTheme = document.body.classList.contains('light-theme') ? 'light' : 'dark';
-            localStorage.setItem('schoolbot-theme', currentTheme);
-            console.log(`🎨 Thème changé : ${currentTheme}`);
+            const t = document.body.classList.contains('light-theme') ? 'light' : 'dark';
+            localStorage.setItem('schoolbot-theme', t);
         });
     }
 
-    addBotMessage("👋 Bonjour ! Je suis **SchoolBot TP2** avec des animations !\n\nEssaie le bouton ☀️/🌙 pour changer de thème, et regarde les animations !");
+    // ============================================
+    // MODULE 3 : Chargement des données JSON
+    // ============================================
+    chargerDonneesEtudiants().then(data => {
+        if (data) {
+            addBotMessage(`🎓 Données chargées ! Je connais **${data.etudiants.length} étudiants** de **${data.etablissement}** !\n\nEssaie : "Qui est Amadou ?" ou "Liste tous les étudiants" 😊`);
+        } else {
+            addBotMessage("⚠️ Impossible de charger les données. Lance le projet avec un serveur local !\n\n```\npython -m http.server 8000\n```");
+        }
+    });
 
+    // Événements
     sendBtn.addEventListener('click', sendMessage);
     userInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
 
     clearBtn.addEventListener('click', () => {
         chatContainer.innerHTML = '';
         messageCount = 0;
-        addBotMessage("💬 Conversation effacée !");
+        addBotMessage("💬 Conversation effacée ! Recommençons 😊");
     });
 
     modeButtons.forEach(btn => {
@@ -159,17 +133,23 @@ function initializeApp() {
         });
     });
 
+    // Exposer sendMessage pour les suggestions
+    window.triggerSend = sendMessage;
+
+    // ============================================
+    // FONCTIONS INTERNES
+    // ============================================
+
     function sendMessage() {
         const message = userInput.value.trim();
         if (!message) return;
+
         addUserMessage(message);
         userInput.value = '';
 
-        // PARTIE 5 : Animation bouton
         sendBtn.classList.add('sending');
         setTimeout(() => sendBtn.classList.remove('sending'), 500);
 
-        // PARTIE 3 : Typing indicator + délai aléatoire
         showTypingIndicator();
         const delay = Math.random() * 1500 + 800;
         setTimeout(() => {
@@ -178,11 +158,69 @@ function initializeApp() {
         }, delay);
     }
 
+    // ============================================
+    // MODULE 3 : Génération de réponses avec données JSON
+    // ============================================
     function generateResponse(userMessage, mode) {
         const msg = userMessage.toLowerCase().trim();
+
+        // Mots-clés simples en priorité
         for (const [keyword, modeResponses] of Object.entries(keywordResponses)) {
             if (msg.includes(keyword)) return modeResponses[mode] || modeResponses.naturel;
         }
+
+        // Si données chargées → interpréter la question
+        if (donneesChargees()) {
+            const intent = interpreterQuestion(userMessage);
+
+            switch(intent.type) {
+                case 'presentation': {
+                    if (!intent.nom) return "Pour qui ? Donne-moi un prénom ! 😊";
+                    const etudiants = rechercherEtudiant(intent.nom);
+                    if (etudiants.length > 0) return presenterEtudiant(etudiants[0], mode);
+                    return `Je ne connais pas "${intent.nom}" 🤔\nÉtudiants disponibles : Amadou, Fatou, Moussa, Aïssatou, Ibrahim`;
+                }
+                case 'funfact': {
+                    const nom = intent.nom;
+                    const etudiant = nom ? rechercherEtudiant(nom)[0] : etudiantAleatoire();
+                    if (etudiant) return `🎉 Fun fact sur **${etudiant.prenom}** :\n\n${funFactAleatoire(etudiant)}`;
+                    return `Je ne connais pas cette personne 🤷`;
+                }
+                case 'statistiques': {
+                    const stats = studentsData.stats;
+                    return `📊 **Statistiques de ${studentsData.etablissement} :**\n\n👥 Total : ${stats.totalEtudiants} étudiants\n🎓 Filières : ${stats.filieres.join(', ')}\n📦 Projets cumulés : ${stats.totalProjets}\n☕ Cafés/jour total : ${stats.totalCafes}`;
+                }
+                case 'liste': {
+                    const liste = studentsData.etudiants
+                        .map(e => `• ${e.photo} **${e.prenom} ${e.nom}** — ${e.filiere} (${e.niveau})`)
+                        .join('\n');
+                    return `📋 **Liste des étudiants :**\n\n${liste}`;
+                }
+                case 'recherche-interet': {
+                    const interesses = filtrerParInteret(intent.interet);
+                    if (interesses.length > 0) {
+                        const noms = interesses.map(e => `• ${e.photo} ${e.prenom} ${e.nom}`).join('\n');
+                        return `**${interesses.length} personne(s)** s'intéressent à "${intent.interet}" :\n\n${noms}`;
+                    }
+                    return `Personne ne s'intéresse à "${intent.interet}" dans ma base 🤷`;
+                }
+                case 'filiere': {
+                    const parFiliere = filtrerParFiliere(intent.filiere);
+                    if (parFiliere.length > 0) {
+                        const noms = parFiliere.map(e => `• ${e.photo} ${e.prenom} ${e.nom}`).join('\n');
+                        return `**${parFiliere.length} étudiant(s)** en ${intent.filiere} :\n\n${noms}`;
+                    }
+                    return `Aucun étudiant en ${intent.filiere} 🤔`;
+                }
+                case 'aleatoire': {
+                    const rand = etudiantAleatoire();
+                    if (rand) return `🎲 Étudiant aléatoire !\n\n${presenterEtudiant(rand, mode)}`;
+                    break;
+                }
+            }
+        }
+
+        // Fallback
         const modeResponses = responses[mode] || responses.naturel;
         return modeResponses[Math.floor(Math.random() * modeResponses.length)];
     }
