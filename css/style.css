@@ -1,56 +1,82 @@
 /* =================================================================
-   SCHOOLBOT — TP1 : CSS de base
-   Exercice 2 : Variables de couleurs personnalisables
+   SCHOOLBOT — TP2 : CSS complet
+   Partie 1 : Toggle thème
+   Partie 2 : Variables thème clair
+   Partie 3 : Typing indicator
+   Partie 4 : Animations messages
+   Partie 5 : Micro-interactions
    ================================================================= */
 
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
 
 /* ============================================
-   EXERCICE 2 : Variables CSS (thème personnalisable)
+   VARIABLES — THÈME SOMBRE (défaut)
    ============================================ */
 :root {
-    /* Couleurs principales — modifiez-les ! */
-    --primary-color: #6366f1;       /* Indigo */
-    --secondary-color: #8b5cf6;     /* Violet */
-    --accent-color: #f59e0b;        /* Ambre */
+    --primary-color: #6366f1;
+    --secondary-color: #8b5cf6;
+    --accent-color: #f59e0b;
 
-    /* Fonds */
     --bg-main: #0a0a0f;
     --bg-secondary: #12121a;
     --bg-card: #1a1a2e;
     --bg-input: #1e1e30;
+    --bg-hover: #252538;
 
-    /* Textes */
     --text-primary: #f1f1f8;
     --text-secondary: #a8a8c0;
     --text-muted: #5a5a7a;
 
-    /* Bordures */
     --border-color: #2a2a40;
 
-    /* Messages */
     --bot-message-bg: #1e1e35;
-    --user-message-bg: #6366f1;
+    --user-message-bg: linear-gradient(135deg, #6366f1, #8b5cf6);
 
-    /* Ombres */
     --shadow-sm: 0 2px 8px rgba(0,0,0,0.3);
     --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.5);
+    --shadow-glow: 0 0 20px rgba(99,102,241,0.3);
 
-    /* Bordures arrondies */
     --radius-sm: 8px;
     --radius-md: 14px;
     --radius-lg: 20px;
     --radius-full: 9999px;
 
-    /* Polices */
     --font-display: 'Syne', sans-serif;
     --font-body: 'DM Sans', sans-serif;
 }
 
 /* ============================================
-   RESET & BASE
+   PARTIE 2 : THÈME CLAIR
    ============================================ */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body.light-theme {
+    --bg-main: #f0f0f8;
+    --bg-secondary: #ffffff;
+    --bg-card: #ffffff;
+    --bg-input: #f4f4fc;
+    --bg-hover: #e8e8f5;
+    --text-primary: #0f0f1a;
+    --text-secondary: #3a3a5c;
+    --text-muted: #8888aa;
+    --border-color: #ddddf0;
+    --bot-message-bg: #ededff;
+    --shadow-sm: 0 2px 8px rgba(99,102,241,0.08);
+    --shadow-md: 0 4px 16px rgba(99,102,241,0.12);
+}
+
+/* ============================================
+   PARTIE 2 : TRANSITIONS GLOBALES (changement de thème fluide)
+   ============================================ */
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+* {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
 body {
     font-family: var(--font-body);
@@ -87,11 +113,7 @@ body {
     box-shadow: var(--shadow-md);
 }
 
-.header-brand {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
+.header-brand { display: flex; align-items: center; gap: 12px; }
 
 .brand-logo {
     width: 44px;
@@ -102,6 +124,12 @@ body {
     align-items: center;
     justify-content: center;
     font-size: 1.4rem;
+    animation: logoFloat 3s ease-in-out infinite;
+}
+
+@keyframes logoFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
 }
 
 .brand-text h1 {
@@ -114,31 +142,77 @@ body {
     background-clip: text;
 }
 
-.brand-text p {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-}
+.brand-text p { font-size: 0.75rem; color: var(--text-muted); }
 
-.clear-btn {
-    padding: 8px 16px;
-    border-radius: var(--radius-md);
+.header-controls { display: flex; align-items: center; gap: 8px; }
+
+/* ============================================
+   PARTIE 1 : BOUTON TOGGLE THÈME
+   ============================================ */
+.theme-toggle {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-full);
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
-    color: var(--text-secondary);
     cursor: pointer;
-    font-family: var(--font-body);
-    font-size: 0.85rem;
-    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Partie 5 : Micro-interaction survol */
+.theme-toggle:hover {
+    transform: rotate(180deg) scale(1.1);
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-glow);
+}
+
+.theme-toggle:active {
+    transform: rotate(180deg) scale(0.95);
+}
+
+/* Icônes soleil/lune */
+.theme-icon {
+    position: absolute;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Thème sombre : montrer la lune */
+.theme-icon.sun { opacity: 0; transform: rotate(180deg) scale(0); }
+.theme-icon.moon { opacity: 1; transform: rotate(0) scale(1); }
+
+/* Thème clair : montrer le soleil */
+body.light-theme .theme-icon.sun { opacity: 1; transform: rotate(0) scale(1); }
+body.light-theme .theme-icon.moon { opacity: 0; transform: rotate(-180deg) scale(0); }
+
+.clear-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-full);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    color: var(--text-muted);
 }
 
 .clear-btn:hover {
     background: rgba(239,68,68,0.1);
     border-color: #ef4444;
     color: #ef4444;
+    transform: scale(1.1);
 }
 
 /* ============================================
-   SÉLECTEUR DE MODE — Exercice 3
+   SÉLECTEUR DE MODE — Partie 5 : micro-interactions
    ============================================ */
 .mode-selector {
     display: flex;
@@ -158,25 +232,49 @@ body {
     background: var(--bg-secondary);
     color: var(--text-secondary);
     font-family: var(--font-body);
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.3s ease;
     white-space: nowrap;
+    position: relative;
+    overflow: hidden;
 }
+
+/* Partie 5 : Effet ripple au survol */
+.mode-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    transform: translate(-50%, -50%);
+    transition: width 0.5s ease, height 0.5s ease;
+}
+
+.mode-btn:hover::before { width: 200px; height: 200px; }
 
 .mode-btn:hover {
     border-color: var(--primary-color);
     color: var(--text-primary);
-    background: #252538;
+    background: var(--bg-hover);
     transform: translateY(-2px);
 }
 
+/* Partie 5 : Bouton actif pulse */
 .mode-btn.active {
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     border-color: transparent;
     color: white;
     font-weight: 600;
+    animation: pulse 2s ease infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(99,102,241,0.5); }
+    50% { box-shadow: 0 0 0 8px rgba(99,102,241,0); }
 }
 
 /* ============================================
@@ -210,18 +308,57 @@ body {
 }
 
 /* ============================================
-   MESSAGES
+   PARTIE 4 : ANIMATIONS DES MESSAGES
    ============================================ */
 .message {
     display: flex;
     align-items: flex-start;
     gap: 10px;
     max-width: 85%;
+    position: relative;
+    transition: transform 0.2s ease;
 }
 
-.bot-message { align-self: flex-start; }
-.user-message { align-self: flex-end; flex-direction: row-reverse; }
+/* Partie 4 : Effet survol */
+.message:hover { transform: translateY(-2px); }
 
+.message::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: var(--radius-md);
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    opacity: 0;
+    z-index: -1;
+    transition: opacity 0.3s ease;
+}
+
+.message:hover::before { opacity: 0.05; }
+
+/* Partie 4 : SlideIn gauche pour bot */
+.bot-message {
+    align-self: flex-start;
+    animation: slideInLeft 0.4s ease;
+}
+
+/* Partie 4 : SlideIn droite pour user */
+.user-message {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+    animation: slideInRight 0.4s ease;
+}
+
+@keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+    from { opacity: 0; transform: translateX(30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* Partie 4 : Bounce avatar */
 .message-avatar {
     width: 36px;
     height: 36px;
@@ -233,13 +370,27 @@ body {
     justify-content: center;
     font-size: 1rem;
     flex-shrink: 0;
+    animation: bounceIn 0.5s ease;
 }
 
+@keyframes bounceIn {
+    0% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Partie 4 : FadeInScale contenu */
 .message-content {
     padding: 12px 16px;
     border-radius: var(--radius-md);
     font-size: 0.9rem;
     line-height: 1.6;
+    animation: fadeInScale 0.3s ease;
+}
+
+@keyframes fadeInScale {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
 }
 
 .bot-message .message-content {
@@ -253,10 +404,40 @@ body {
     background: var(--user-message-bg);
     color: white;
     border-top-right-radius: 4px;
+    box-shadow: var(--shadow-glow);
 }
 
 /* ============================================
-   INPUT
+   PARTIE 3 : TYPING INDICATOR
+   ============================================ */
+.typing-indicator .message-content {
+    background: var(--bot-message-bg);
+    border: 1px solid var(--border-color);
+    padding: 14px 18px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.typing-dots { display: flex; gap: 5px; align-items: center; }
+
+.typing-dots .dot {
+    width: 8px;
+    height: 8px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    animation: typingBounce 1.4s infinite;
+}
+
+.typing-dots .dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots .dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingBounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+    30% { transform: translateY(-10px); opacity: 1; }
+}
+
+/* ============================================
+   PARTIE 5 : INPUT + BOUTON MICRO-INTERACTIONS
    ============================================ */
 .input-area {
     padding: 16px;
@@ -266,6 +447,7 @@ body {
     background: var(--bg-secondary);
 }
 
+/* Partie 5 : Input focus animation */
 #user-input {
     flex: 1;
     padding: 12px 16px;
@@ -279,39 +461,70 @@ body {
     transition: all 0.3s ease;
 }
 
-#user-input::placeholder { color: var(--text-muted); }
+#user-input::placeholder {
+    color: var(--text-muted);
+    transition: all 0.3s ease;
+}
 
 #user-input:focus {
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.15), var(--shadow-sm);
+    transform: translateY(-2px);
 }
 
+#user-input:focus::placeholder {
+    opacity: 0.4;
+    transform: translateX(6px);
+}
+
+/* Partie 5 : Bouton envoi brillance + spin */
 .send-btn {
-    padding: 12px 20px;
+    width: 46px;
+    height: 46px;
     border-radius: var(--radius-md);
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     border: none;
-    color: white;
-    font-family: var(--font-body);
-    font-size: 0.9rem;
-    font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
-    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    box-shadow: var(--shadow-glow);
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
 }
+
+.send-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.send-btn:hover::before { left: 100%; }
 
 .send-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(99,102,241,0.4);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(99,102,241,0.5);
 }
 
-.send-btn:active { transform: translateY(0); }
+.send-btn:active { transform: translateY(0) scale(0.97); }
+
+/* Partie 5 : Spin lors envoi */
+.send-btn.sending .btn-icon { animation: spin 0.5s ease; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
 
 /* ============================================
    RESPONSIVE
    ============================================ */
 @media (max-width: 600px) {
     .app-wrapper { padding: 8px; gap: 8px; }
-    .mode-btn { font-size: 0.75rem; padding: 6px 8px; }
+    .mode-btn { font-size: 0.72rem; padding: 6px 8px; }
     .message { max-width: 95%; }
 }
