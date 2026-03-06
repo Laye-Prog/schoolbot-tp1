@@ -528,3 +528,35 @@ body.light-theme .theme-icon.moon { opacity: 0; transform: rotate(-180deg) scale
     .mode-btn { font-size: 0.72rem; padding: 6px 8px; }
     .message { max-width: 95%; }
 }
+
+/* ============================================
+   TP3 : SUGGESTIONS RAPIDES
+   ============================================ */
+.suggestions {
+    padding: 10px 16px 0;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+}
+
+.suggestion-chip {
+    padding: 5px 12px;
+    border-radius: var(--radius-full);
+    background: var(--bg-input);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    cursor: pointer;
+    font-family: var(--font-body);
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.suggestion-chip:hover {
+    background: rgba(99,102,241,0.1);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    transform: translateY(-2px);
+}
